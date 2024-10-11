@@ -1,0 +1,75 @@
+---
+curso: "Introducción a la minería de datos"
+title: "Tarea 1"
+author: Jessica Elizabeth Botón Pérez
+carne: 999014960
+---
+
+install.packages("arules")
+library(arules)
+
+
+
+```{r}
+data <- read.csv('C:\\Users\\Pc\\Downloads\\db_csv_\\PERSONA_BDP.csv', sep=",")
+
+data
+```
+
+
+
+```{r}
+
+data_clean <- data[, sapply(data, function(col) {
+  unique_vals <- unique(na.omit(col))  # Eliminar NAs y obtener valores únicos
+  length(unique_vals) > 1              # Mantener solo las columnas con más de un valor
+})]
+str(data_clean)
+
+# Otras formas de eliminar filas con información repetida
+#data <- data %>% select(-PCP33) //La función anterior no elimina esta columna
+#data <- data[ , !names(data) %in% c("PEA")]
+
+```
+
+
+
+```{r}
+reglas <- apriori(data_clean, parameter = list(support=0.2, confidence=0.5))
+ 
+#checking subsets of size 1 2
+#writing ... [2641 rule(s)] done [0.00s]
+
+inspect(reglas[0:200])
+inspect(reglas[500:700])
+inspect(reglas[701:1100])
+inspect(reglas[1300:1400])
+inspect(reglas[1401:1699])
+inspect(reglas[1700:1999])
+inspect(reglas[2000:2100])
+
+```
+
+```{r}
+
+# No FUNCIONAL
+
+#[48]	{NIVGRADO=[10,32)}	=>	{PCP17_A=[1,3)}	0.2284077	0.8338659	
+# Si estudio ninguno, preprimaria o primaria, el 22 de las veces el grado más alto que aprobó es ninguno, preprimaria o primaria
+
+# FUNCIONAL
+#[42]	{RESCINGEO=[101,601)}	=>	{PCP26_A=[1,2)}	0.2045403	0.7046434
+
+
+```
+
+
+```{r}
+
+reglas_filtradas <- subset(reglas, subset = grepl("PCP34", labels(lhs)) | grepl("PCP34", labels(rhs)))
+
+reglas_filtradas
+inspect(reglas_filtradas[0:79])
+
+```
+
