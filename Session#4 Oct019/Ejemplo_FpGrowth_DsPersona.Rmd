@@ -1,0 +1,59 @@
+---
+curso: "Introducción a la minería de datos"
+title: "Ejercicio en Clase"
+author: Jessica Elizabeth Botón Pérez
+carne: 999014960
+---
+
+
+```{r}
+data = read.csv('C:/Users/kevin/OneDrive/Documentos/MIIC/Mineria/Censo2018/PERSONA_BDP.csv', sep=',')
+
+data
+
+datamsc <- subset(data, NIVGRADO == 61)
+
+datamsc2 <- datamsc[, c(10,11,14,32,33,39,64,65,77,78,82)]
+
+datamsc2 <- datamsc2[, !(names(datamsc2) %in% c("PCP17_A"))]
+datamsc2 <- datamsc2[, !(names(datamsc2) %in% c("PCP17_B"))]
+```
+
+
+
+```{r}
+# Definimos los parametros del algoritmo FpGrowth
+
+reglas <- fim4r(datamsc2, method = "fpgrowth", target="rules", supp = .2, conf = .5)
+ 
+#Ahora inspeccionamos las reglas
+
+reglasframe <- as(reglas, "data.frame")
+```
+
+
+
+```{r}
+# Filtramos por un nivel de educación menor
+
+data2 <- subset(data, DEPARTAMENTO == 1)
+
+# Eliminamos la columna que contiene todos los datos iguales (depto = 1) para mantener un buen nivel de entropía y evitar error al ejecutar
+
+datamsc <- subset(data, NIVGRADO == 55)
+
+datamsc2 <- datamsc[, c(10,11,14,32,33,39,64,65,77,78,82)]
+
+datamsc2 <- datamsc2[, !(names(datamsc2) %in% c("PCP17_A"))]
+datamsc2 <- datamsc2[, !(names(datamsc2) %in% c("PCP17_B"))]
+
+
+reglas <- fim4r(datamsc2, method = "fpgrowth", target="rules", supp = .2, conf = .5)
+
+reglasframe <- as(reglas, "data.frame")
+```
+
+
+
+
+
