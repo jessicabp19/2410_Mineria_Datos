@@ -1,0 +1,53 @@
+---
+  curso: "Introducción a la minería de datos"
+title: "Tarea 5"
+author: Jessica Elizabeth Botón Pérez
+carne: 999014960
+---
+  
+install.packages("rpart")
+install.packages("rpart.plot")
+
+library(rpart)
+library(rpart.plot)
+
+
+```{r}
+hogar <- read.csv('C:\\Users\\Pc\\Downloads\\db_csv_\\HOGAR_BDP.csv', sep=",")
+
+hogar
+```
+
+
+```{r}
+arbolNoFunciono <- rpart(AREA ~
+               PCH9_L+
+               PCH9_M+
+               PCH15+
+               PEI1+
+               PEI2+
+               PEI2_E,
+               data = hogar, method = "class")
+
+rpart.plot(arbolNoFunciono, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de area", cex = 1)
+
+```
+
+
+```{r}
+
+arbol <- rpart(AREA ~
+               PCH9_M+
+               PCH15+
+               PEI1+
+               PEI2+
+               PEI2_E,
+               data = hogar, method = "class")
+
+rpart.plot(arbol, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de área en base a migraciones y vehiculos", cex = 1)
+```
+
+
+
